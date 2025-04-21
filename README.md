@@ -55,7 +55,7 @@ The app uses a PostgreSQL database for persistence and follows clean coding prin
 
    Update your application.properties file with your PostgreSQL credentials:
    ```bash
-   spring.datasource.url=jdbc:postgresql://localhost:5432/quizdb
+   spring.datasource.url=jdbc:postgresql://localhost:5432/your_db
    spring.datasource.username=your_username
    spring.datasource.password=your_password
    spring.jpa.hibernate.ddl-auto=update
