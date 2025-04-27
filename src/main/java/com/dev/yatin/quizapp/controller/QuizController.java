@@ -1,6 +1,7 @@
 package com.dev.yatin.quizapp.controller;
 
 import com.dev.yatin.quizapp.entity.Category;
+import com.dev.yatin.quizapp.entity.Question;
 import com.dev.yatin.quizapp.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,5 +25,10 @@ public class QuizController {
     @GetMapping("getAllCategories")
     public ResponseEntity<List<Category>> getAllCategories() {
         return quizService.getAllCategories();
+    }
+
+    @GetMapping("{quizId}")
+    public ResponseEntity<List<Question>> getQuestions(@PathVariable Long quizId) {
+        return quizService.getQuestions(quizId);
     }
  }

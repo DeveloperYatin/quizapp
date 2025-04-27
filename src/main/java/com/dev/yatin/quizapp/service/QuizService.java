@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,5 +47,11 @@ public class QuizService {
 
     public ResponseEntity<List<Category>> getAllCategories() {
         return new ResponseEntity<>(categoryDao.findAll(), HttpStatus.OK);
+    }
+
+    public ResponseEntity<List<Question>> getQuestions(Long quizId) {
+        Optional<Quiz> quizData = quizDao.findById(quizId);
+        return quizData.map(quiz -> new ResponseEntity<>(quiz.getQuestions(), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST));
     }
 }
