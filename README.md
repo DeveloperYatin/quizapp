@@ -85,6 +85,7 @@ The app uses a PostgreSQL database for persistence and follows clean coding prin
 | GET         | `/question/allQuestion`            | Fetch all quiz questions                  |
 | POST        | `/question/addQuestion`            | Add a new quiz question                   |
 | GET         | `/question/category/category_id`   | Fetch all questions for category_id       |
+| POST        | `/quiz/submit`                     | Submit a Quiz                             |
 
 ---
 
