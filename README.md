@@ -79,11 +79,12 @@ The app uses a PostgreSQL database for persistence and follows clean coding prin
 
 | HTTP Method | Endpoint                           | Description                               |
 |-------------|------------------------------------|-------------------------------------------|
+| POST        | `/quiz/createQuiz?category=category_name&noOfQues=no_of_ques&title=quiz_title` | Create quiz  |
 | GET         | `/quiz/getAllCategories`           | Fetch all valid categories                |
+| GET         | `/quiz/quiz_id`                    | Fetch all questions using quiz_id         |
 | GET         | `/question/allQuestion`            | Fetch all quiz questions                  |
 | POST        | `/question/addQuestion`            | Add a new quiz question                   |
-| GET         | `/question/category/category_name` | Fetch random questions for category_name  |
-| POST        | `/quiz/createQuiz?category=category_name&noOfQues=no_of_ques&title=quiz_title` | Create quiz  |
+| GET         | `/question/category/category_id`   | Fetch all questions for category_id       |
 
 ---
 
