@@ -3,9 +3,8 @@ package com.dev.yatin.quizapp.service;
 import com.dev.yatin.quizapp.dao.QuestionDao;
 import com.dev.yatin.quizapp.dao.QuizDao;
 import com.dev.yatin.quizapp.dao.CategoryDao;
-import com.dev.yatin.quizapp.entity.Question;
-import com.dev.yatin.quizapp.entity.Quiz;
-import com.dev.yatin.quizapp.entity.Category;
+import com.dev.yatin.quizapp.entity.*;
+import com.dev.yatin.quizapp.utils.OptionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +52,34 @@ public class QuizService {
         Optional<Quiz> quizData = quizDao.findById(quizId);
         return quizData.map(quiz -> new ResponseEntity<>(quiz.getQuestions(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST));
+    }
+
+    public ResponseEntity<List<String>> submitQuiz(Long quizId, Response userResponse) {
+        Optional<Quiz> quizData = quizDao.findById(quizId);
+        ArrayList<String> answers = new ArrayList<>();
+
+        if(quizId == 0) return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
+
+        if(quizData.isPresent()){
+            List<Question> questions = quizData.get().getQuestions();
+            for(AnswerRequest responseQues : userResponse.getData()) {
+
+                OptionType optionUserSelected = OptionType.fromString(responseQues.getOption_selected());
+                if(optionUserSelected == null) { answers.add("Not a valid option"); continue; }
+
+                Question ques = questions.stream()
+                        .filter(item -> item.getId().equals(responseQues.getQuestion_id()))
+                        .findFirst()
+                        .orElse(null);
+
+                if(ques == null) { answers.add("Not a valid question id"); continue; }
+
+                if(ques.getCorrectOption().equals(optionUserSelected.getValue()) &&
+                        responseQues.getQuestion_id().equals(ques.getId())) answers.add("Correct");
+                else answers.add("Wrong");
+            }
+            return new ResponseEntity<>(answers, HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 }
