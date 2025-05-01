@@ -2,6 +2,8 @@ package com.dev.yatin.quizapp.utils;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.HashMap;
+import java.util.Map;
 
 public enum OptionType {
     optionA("A"),
@@ -20,13 +22,18 @@ public enum OptionType {
         return value;
     }
 
+    // Static map for O(1) lookup by name
+    private static final Map<String, OptionType> NAME_MAP = new HashMap<>();
+
+    static {
+        for (OptionType type : values()) {
+            NAME_MAP.put(type.name().toLowerCase(), type); // or just type.name() if case sensitivity is fine
+        }
+    }
+
     @JsonCreator
     public static OptionType fromString(String name) {
-        for (OptionType type : OptionType.values()) {
-            if (type.name().equalsIgnoreCase(name)) {
-                return type;
-            }
-        }
-        return null;
+        if (name == null) return null;
+        return NAME_MAP.get(name.toLowerCase());
     }
 }
