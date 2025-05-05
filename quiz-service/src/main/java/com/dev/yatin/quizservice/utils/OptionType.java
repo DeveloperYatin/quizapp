@@ -31,6 +31,12 @@ public enum OptionType {
         }
     }
 
+    /**
+     * Returns the {@code OptionType} corresponding to the given name, ignoring case.
+     *
+     * @param name the name of the option (e.g., "A", "optionA", "OptionA"); case-insensitive
+     * @return the matching {@code OptionType}, or {@code null} if no match is found or if {@code name} is {@code null}
+     */
     @JsonCreator
     public static OptionType fromString(String name) {
         if (name == null) return null;

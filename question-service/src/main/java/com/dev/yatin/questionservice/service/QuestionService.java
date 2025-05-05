@@ -22,6 +22,11 @@ public class QuestionService {
     @Autowired
     CategoryRepository categoryRepository;
 
+    /**
+     * Retrieves all questions from the database.
+     *
+     * @return a ResponseEntity containing the list of all Question objects with HTTP status 200 (OK), or an empty list with HTTP status 400 (Bad Request) if an error occurs
+     */
     public ResponseEntity<List<Question>> getAllQuestions() {
        try {
            return new ResponseEntity<>(questionRepository.findAll(), HttpStatus.OK);
@@ -31,6 +36,12 @@ public class QuestionService {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Retrieves all questions associated with the specified category ID.
+     *
+     * @param category the ID of the category to filter questions by
+     * @return a list of questions belonging to the given category, or an empty list if the category does not exist or the ID is invalid
+     */
     public List<Question> getQuestionsByCategory(int category) {
         if(category <= 0) new ResponseEntity<>("Negative values not acceptable", HttpStatus.BAD_REQUEST);
         Optional<Category> cat = categoryRepository.findById(category);
@@ -38,6 +49,12 @@ public class QuestionService {
         return questionRepository.findByCategory(cat.get());
     }
 
+    /**
+     * Saves a new Question entity to the database and returns it with HTTP status 201 (Created).
+     *
+     * @param question the Question entity to be added
+     * @return a ResponseEntity containing the saved Question and HTTP status 201 (Created)
+     */
     public ResponseEntity<Question> addQuestion(Question question) {
         return new ResponseEntity<>(questionRepository.save(question), HttpStatus.CREATED);
     }

@@ -23,6 +23,18 @@ public class QuizService {
     @Autowired
     private QuestionClient questionClient;
 
+    /**
+     * Creates a new quiz with the specified title, category, and number of questions.
+     *
+     * Validates input parameters and retrieves a random set of questions from the specified category.
+     * If successful, saves the quiz and returns a confirmation message.
+     * Returns an error message with HTTP 400 status if validation fails or the category is not found.
+     *
+     * @param categoryName the name of the category from which to select questions
+     * @param noOfQues the number of questions to include in the quiz
+     * @param title the title of the quiz
+     * @return a ResponseEntity containing a success or error message and the appropriate HTTP status code
+     */
     public ResponseEntity<String> createQuiz(String categoryName, int noOfQues, String title) {
         if(title.isEmpty()) return new ResponseEntity<>("Must add title", HttpStatus.BAD_REQUEST);
         if(categoryName.isEmpty()) return new ResponseEntity<>("Must add category", HttpStatus.BAD_REQUEST);
@@ -41,16 +53,37 @@ public class QuizService {
         return new ResponseEntity<>("Quiz created successfully", HttpStatus.CREATED);
     }
 
+    /**
+     * Retrieves all available quiz categories.
+     *
+     * @return a ResponseEntity containing a list of category DTOs with HTTP 200 status
+     */
     public ResponseEntity<List<CategoryDto>> getAllCategories() {
         return new ResponseEntity<>(questionClient.getAllCategories(), HttpStatus.OK);
     }
 
+    /**
+     * Retrieves the list of questions for a given quiz ID.
+     *
+     * @param quizId the ID of the quiz to fetch questions for
+     * @return a ResponseEntity containing the list of QuestionDto objects with HTTP 200 if the quiz exists,
+     *         or an empty list with HTTP 400 if the quiz is not found
+     */
     public ResponseEntity<List<QuestionDto>> getQuestions(Long quizId) {
         Optional<Quiz> quizData = quizRepository.findById(quizId);
         return quizData.map(quiz -> new ResponseEntity<>(quiz.getQuestions(), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST));
     }
 
+    /**
+     * Evaluates a user's quiz submission and returns the result for each answered question.
+     *
+     * For each answer in the user's response, checks if the selected option is valid and matches the correct answer for the corresponding question in the quiz. Returns a list of result strings ("Correct", "Wrong", "Not a valid option", or "Not a valid question id") for each answer.
+     *
+     * @param quizId the ID of the quiz being submitted
+     * @param userResponse the user's submitted answers
+     * @return a ResponseEntity containing a list of result strings for each answer, or an empty list with HTTP 400 if the quiz is not found or the quizId is invalid
+     */
     public ResponseEntity<List<String>> submitQuiz(Long quizId, Response userResponse) {
         Optional<Quiz> quizData = quizRepository.findById(quizId);
         ArrayList<String> answers = new ArrayList<>();
