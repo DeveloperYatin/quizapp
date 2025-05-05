@@ -9,6 +9,11 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @EnableFeignClients
 public class QuizServiceApplication {
+    /**
+     * Launches the Quiz Service Spring Boot application.
+     *
+     * @param args command-line arguments passed to the application
+     */
     public static void main(String[] args) {
         SpringApplication.run(QuizServiceApplication.class, args);
     }
